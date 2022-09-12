@@ -1,9 +1,14 @@
 <script lang="ts" setup>
+import { ref } from "vue";
 import Login from "./pages/user/login/index.vue";
+import { defineComponent } from "vue";
+import { ElConfigProvider } from "element-plus";
 </script>
 
 <template>
-  <Login></Login>
+  <el-config-provider size="default" :z-index="2000">
+    <Login></Login>
+  </el-config-provider>
   <!-- <router-view></router-view> -->
 </template>
 

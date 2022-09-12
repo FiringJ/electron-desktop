@@ -1,14 +1,29 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import Logo from "~/assets/images/logo.png";
+import Alipay from "~/assets/images/alipay.png";
+import Wechat from "~/assets/images/wechat.png";
 
 defineProps({
   msg: String,
 });
 
 const brandName = ref("Electron Desktop");
-const brandTip = ref("electron-desktop是一款优秀的的即时交互软件");
+const brandTip = ref("electron-desktop 是一款优秀的的即时交互软件");
 const count = ref(0);
+
+const activeIndex = ref("1");
+const handleSelect = (key: string, keyPath: string[]) => {
+  activeIndex.value = key[0];
+};
+
+/* 账号密码登录 */
+const account = ref("");
+const password = ref("");
+const telephone = ref("");
+const vcode = ref("");
+
+const autoLogin = ref(false);
 </script>
 
 <template>
@@ -20,26 +35,51 @@ const count = ref(0);
     <div class="brand-tip">{{ brandTip }}</div>
   </div>
 
-  <div class="card">
-    <button type="button" @click="count++">count is {{ count }}</button>
-    <p>
-      Edit
-      <code>components/HelloWorld.vue</code> to test HMR
-    </p>
-  </div>
+  <div class="mx-[150px]">
+    <el-menu
+      :default-active="activeIndex"
+      class="el-menu-demo"
+      mode="horizontal"
+      @select="handleSelect"
+    >
+      <el-menu-item index="1">账号密码登录</el-menu-item>
+      <el-menu-item index="2">手机号登录</el-menu-item>
+    </el-menu>
+    <div v-if="activeIndex === '1'">
+      <el-input class="mt-[5px]" v-model="account" placeholder="账户" />
+      <el-input class="mt-[5px]" v-model="password" placeholder="密码" />
+    </div>
+    <div v-if="activeIndex === '2'">
+      <el-input class="mt-[5px]" v-model="telephone" placeholder="手机号" />
+      <el-input class="mt-[5px]" v-model="vcode" placeholder="验证码" />
+    </div>
 
-  <p>
-    Check out
-    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank"
-      >create-vue</a
-    >, the official Vue + Vite starter
-  </p>
-  <p>
-    Install
-    <a href="https://github.com/johnsoncodehk/volar" target="_blank">Volar</a>
-    in your IDE for a better DX
-  </p>
-  <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
+    <div class="flex w-full justify-between items-center">
+      <el-checkbox v-model="autoLogin" label="自动登录" size="large" />
+      <div class="text-blue-400 text-[14px] leading-[22px]">忘记密码</div>
+    </div>
+
+    <el-button type="primary" class="w-full mt-[10px]">登录</el-button>
+
+    <div class="w-full flex justify-start items-center mt-[12px]">
+      <span class="text-[14px] leading-[22px] text-[#606266]"
+        >其他登录方式</span
+      >
+      <img :src="Alipay" alt="" class="ml-[8px] w-[24px] h-[24px]" />
+      <img :src="Wechat" alt="" class="ml-[4px] w-[24px] h-[24px]" />
+      <div
+        class="flex-1 text-right text-blue-400 text-[14px] leading-[22px] text-[#606266]"
+      >
+        注册账户
+      </div>
+    </div>
+
+    <div
+      class="w-screen fixed bottom-[20px] flex justify-center text-[14px] leading-[22px] text-gray-500 text-center"
+    >
+      Copyright @ 2022 FiringJ
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
