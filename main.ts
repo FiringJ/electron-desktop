@@ -1,8 +1,11 @@
 // main.ts
 
 // 控制应用生命周期和创建原生浏览器窗口的模组
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, Menu } = require("electron");
 const path = require("path");
+
+/* 隐藏菜单栏 */
+// Menu.setApplicationMenu(null);
 
 function createWindow() {
   // 创建浏览器窗口
@@ -11,13 +14,21 @@ function createWindow() {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.ts"),
+      webSecurity: false,
     },
   });
 
   // 加载 index.html
-  mainWindow.loadFile("dist/index.html"); // 此处跟electron官网路径不同，需要注意
+  if (process.env.NODE_ENV === "dev") {
+    mainWindow.loadFile("dist/index.html"); // 此处跟electron官网路径不同，需要注意
+  } else {
+    mainWindow.loadURL(path.join(__dirname, "dist/index.html"));
+  }
 
   // 打开开发工具
+  if (process.env.NODE_ENV === "dev") {
+    mainWindow.webContents.openDevTools();
+  }
   // mainWindow.webContents.openDevTools()
 }
 
